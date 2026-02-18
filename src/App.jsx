@@ -369,6 +369,9 @@ export default function App() {
     } else if (activeTab === TABS.TV) loadTv();
     else if (activeTab === TABS.MOVIES) loadMovies();
     else if (activeTab === TABS.NEW) loadNew();
+    else if (activeTab === TABS.MYLIST) {
+      setMyList(getMyList());
+    }
   }, [activeTab, loadHome, loadTv, loadMovies, loadNew]);
 
   useEffect(() => {
@@ -410,7 +413,7 @@ export default function App() {
   const renderContent = () => {
     if (activeTab === TABS.MYLIST) {
       return (
-        <main className="movie-rows">
+        <main className="movie-rows movie-rows-no-hero">
           <MovieRow title="My List" items={myList} onSelect={handleSelect} onPlay={handlePlay} onAddToList={handleAddToList} />
           {!myList.length && (
             <div className="empty-mylist">

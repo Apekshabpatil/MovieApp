@@ -517,6 +517,11 @@ body {
   z-index: 3;
 }
 
+.movie-rows-no-hero {
+  margin-top: 0;
+  padding-top: 100px;
+}
+
 .movie-row {
   margin-bottom: 2.5rem;
 }
