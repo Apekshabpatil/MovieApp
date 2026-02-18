@@ -1,35 +1,33 @@
-## Weather Glass – Weatherstack Demo
+# MovieApp - Netflix-Style Movie Discovery
 
-This is a small React single-page app built with Vite that uses the **Weatherstack API** to display:
+A Netflix-inspired frontend app that fetches and displays movies and TV shows from [The Movie Database (TMDB)](https://www.themoviedb.org/).
 
-- Current weather  
-- Historical weather (by date)  
-- Marine weather (by latitude/longitude)  
+## Features
 
-The UI uses a **glassmorphic** design with translucent cards, blurred backgrounds, and soft gradients.
+- **Search** - Search for movies and TV shows in real-time
+- **Browse** - Home, TV Shows, Movies, New & Popular, My List tabs
+- **Play** - Watch trailers via YouTube (when available)
+- **More Info** - View detailed information in a modal
+- **My List** - Save titles to your list (stored in localStorage)
+- **Responsive** - Hamburger menu on mobile, profile dropdown
 
-### Tech stack
+## Setup
 
-- React 18
-- Vite
-- Vanilla CSS (glassmorphism theme)
+1. Clone the repo
+2. Create a `.env` file with your TMDB API key:
+   ```
+   VITE_TMDB_API_KEY=your_api_key_here
+   ```
+3. Get a free API key from [TMDB](https://www.themoviedb.org/settings/api)
+4. Install and run:
+   ```bash
+   npm install
+   npm run dev
+   ```
 
-### Weatherstack API
-
-The app calls the Weatherstack REST API as described in the official docs \(`https://docs.apilayer.com/weatherstack/docs/api-documentation?utm_source=WeatherstackHomePage&utm_medium=Referral`\) for:
-
-- `/current` – real-time weather for a location  
-- `/historical` – weather for a given date  
-- `/marine` – marine weather by coordinates  
-
-> Note: the API key is currently hard-coded in `src/api/weatherstack.js` for simplicity. For production, move it to environment variables.
-
-### Getting started
+## Build
 
 ```bash
-npm install
-npm run dev
+npm run build
+npm run preview
 ```
-
-Then open `http://localhost:5173` in your browser.
-
