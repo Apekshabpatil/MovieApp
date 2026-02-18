@@ -50,6 +50,10 @@ body {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent);
 }
 
+.netflix-nav.menu-open {
+  background: var(--netflix-black);
+}
+
 .nav-content {
   display: flex;
   align-items: center;
@@ -64,12 +68,16 @@ body {
   letter-spacing: 0.02em;
   color: var(--netflix-red);
   text-decoration: none;
-  margin-right: 28px;
+  margin-right: 0;
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 .nav-links {
   display: flex;
   gap: 4px;
+  margin-left: 24px;
+  flex-shrink: 0;
 }
 
 .nav-links button {
@@ -122,10 +130,22 @@ body {
 }
 
 .profile-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background: var(--netflix-red);
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b3b3b3;
+  transition: all 0.2s ease;
+}
+
+.profile-avatar:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  color: white;
+  background: linear-gradient(135deg, #404040 0%, #2d2d2d 100%);
 }
 
 .profile-dropdown {
@@ -156,6 +176,7 @@ body {
 .hamburger-btn {
   display: none;
   flex-direction: column;
+  margin-right: 12px;
   gap: 5px;
   background: none;
   border: none;
@@ -658,26 +679,32 @@ body {
 }
 
 /* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .hamburger-btn {
     display: flex;
+    flex-shrink: 0;
   }
 
   .nav-links {
     position: fixed;
-    top: 68px;
+    top: 69px;
+    margin-left: 0;
     left: 0;
     right: 0;
-    background: var(--netflix-black);
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(10px);
     flex-direction: column;
-    padding: 20px;
-    gap: 0;
+    padding: 24px 20px 28px;
+    gap: 4px;
     transform: translateY(-100%);
     opacity: 0;
     pointer-events: none;
     transition: transform 0.3s, opacity 0.3s;
     z-index: 99;
     border-bottom: 1px solid #333;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-height: calc(100vh - 68px);
+    overflow-y: auto;
   }
 
   .nav-links.open {
@@ -687,11 +714,28 @@ body {
   }
 
   .nav-links button {
-    padding: 14px 0;
+    padding: 16px 16px;
     text-align: left;
     font-size: 1rem;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 2px;
   }
 
+  .nav-links button:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-links button:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-links button.active {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+
+@media (max-width: 768px) {
   .hero-content {
     max-width: 90%;
   }

@@ -2,12 +2,19 @@ const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = "https://api.themoviedb.org/3";
 const IMAGE_BASE = "https://image.tmdb.org/t/p";
 
+function ensureApiKey() {
+  if (!API_KEY || API_KEY === "your_tmdb_api_key_here") {
+    throw new Error("API key missing. Add VITE_TMDB_API_KEY in Vercel: Project Settings → Environment Variables");
+  }
+}
+
 export function getImageUrl(path, size = "w500") {
   if (!path) return null;
   return `${IMAGE_BASE}/${size}${path}`;
 }
 
 export async function searchMulti(query, page = 1) {
+  ensureApiKey();
   if (!query?.trim()) return { results: [] };
   const res = await fetch(
     `${BASE_URL}/search/multi?api_key=${API_KEY}&language=en-US&query=${encodeURIComponent(query)}&page=${page}&include_adult=false`
@@ -18,6 +25,7 @@ export async function searchMulti(query, page = 1) {
 }
 
 export async function fetchTrending(timeWindow = "day") {
+  ensureApiKey();
   const res = await fetch(
     `${BASE_URL}/trending/all/${timeWindow}?api_key=${API_KEY}&language=en-US`
   );
@@ -26,6 +34,7 @@ export async function fetchTrending(timeWindow = "day") {
 }
 
 export async function fetchPopularMovies(page = 1) {
+  ensureApiKey();
   const res = await fetch(
     `${BASE_URL}/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
   );
@@ -34,6 +43,7 @@ export async function fetchPopularMovies(page = 1) {
 }
 
 export async function fetchPopularTv(page = 1) {
+  ensureApiKey();
   const res = await fetch(
     `${BASE_URL}/tv/popular?api_key=${API_KEY}&language=en-US&page=${page}`
   );
@@ -42,6 +52,7 @@ export async function fetchPopularTv(page = 1) {
 }
 
 export async function fetchTopRatedMovies(page = 1) {
+  ensureApiKey();
   const res = await fetch(
     `${BASE_URL}/movie/top_rated?api_key=${API_KEY}&language=en-US&page=${page}`
   );
@@ -50,6 +61,7 @@ export async function fetchTopRatedMovies(page = 1) {
 }
 
 export async function fetchNowPlayingMovies(page = 1) {
+  ensureApiKey();
   const res = await fetch(
     `${BASE_URL}/movie/now_playing?api_key=${API_KEY}&language=en-US&page=${page}`
   );
@@ -58,6 +70,7 @@ export async function fetchNowPlayingMovies(page = 1) {
 }
 
 export async function fetchDiscoverByGenre(genreId, page = 1, type = "movie") {
+  ensureApiKey();
   const res = await fetch(
     `${BASE_URL}/discover/${type}?api_key=${API_KEY}&language=en-US&page=${page}&with_genres=${genreId}&sort_by=popularity.desc`
   );

@@ -25,6 +25,17 @@ A Netflix-inspired frontend app that fetches and displays movies and TV shows fr
    npm run dev
    ```
 
+## Deploy to Vercel
+
+1. Push your code to GitHub and import the project in [Vercel](https://vercel.com)
+2. **Important:** Add the environment variable:
+   - Go to **Project Settings** → **Environment Variables**
+   - Add: `VITE_TMDB_API_KEY` = `your_tmdb_api_key`
+   - Apply to Production, Preview, and Development
+3. Redeploy (or trigger a new deployment)
+
+Without this variable, the app will show an error screen.
+
 ## Build
 
 ```bash

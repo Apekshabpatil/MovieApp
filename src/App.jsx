@@ -27,7 +27,7 @@ function Nav({ onSearchClick, activeTab, onTabChange, onLogoClick, profileOpen, 
   }, []);
 
   return (
-    <nav className={`netflix-nav ${scrolled ? "scrolled" : ""}`}>
+    <nav className={`netflix-nav ${scrolled ? "scrolled" : ""} ${menuOpen ? "menu-open" : ""}`}>
       <div className="nav-content">
         <button className="hamburger-btn" onClick={onMenuToggle} aria-label="Menu">
           <span className={menuOpen ? "open" : ""}></span>
@@ -52,7 +52,11 @@ function Nav({ onSearchClick, activeTab, onTabChange, onLogoClick, profileOpen, 
           </button>
           <div className="profile-wrap" onClick={(e) => e.stopPropagation()}>
             <button className="nav-profile" onClick={onProfileToggle} aria-label="Profile">
-              <div className="profile-avatar" />
+              <div className="profile-avatar">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
             </button>
             {profileOpen && (
               <div className="profile-dropdown">
@@ -290,7 +294,7 @@ export default function App() {
 
   const loadHome = useCallback(async () => {
     try {
-      const [trendRes, popRes, topRes, nowRes, actionRes, comedyRes] = await Promise.all([
+      const results = await Promise.allSettled([
         fetchTrending("day"),
         fetchPopularMovies(1),
         fetchTopRatedMovies(1),
@@ -298,15 +302,23 @@ export default function App() {
         fetchDiscoverByGenre(GENRES.ACTION, 1),
         fetchDiscoverByGenre(GENRES.COMEDY, 1),
       ]);
-      setTrending(trendRes.results || []);
-      setFeatured((trendRes.results || [])[0]);
-      setPopular((popRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
-      setTopRated((topRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
-      setNowPlaying((nowRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
-      setAction((actionRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
-      setComedy((comedyRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
+      const [trendRes, popRes, topRes, nowRes, actionRes, comedyRes] = results.map((r) => (r.status === "fulfilled" ? r.value : null));
+      setError(null);
+      if (trendRes?.results?.length) {
+        setTrending(trendRes.results);
+        setFeatured(trendRes.results[0]);
+      }
+      if (popRes?.results?.length) setPopular((popRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
+      if (topRes?.results?.length) setTopRated((topRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
+      if (nowRes?.results?.length) setNowPlaying((nowRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
+      if (actionRes?.results?.length) setAction((actionRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
+      if (comedyRes?.results?.length) setComedy((comedyRes.results || []).map((r) => ({ ...r, media_type: "movie" })));
+      if (!trendRes?.results?.length) {
+        const firstError = results.find((r) => r.status === "rejected");
+        setError(firstError?.reason?.message || "Add VITE_TMDB_API_KEY in Vercel Environment Variables");
+      }
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Add VITE_TMDB_API_KEY in Vercel: Project Settings → Environment Variables");
     }
   }, []);
 
@@ -489,7 +501,10 @@ export default function App() {
         <div className="error-screen">
           <h1>Something went wrong</h1>
           <p>{error}</p>
-          <p className="hint">Check your API key in .env (VITE_TMDB_API_KEY)</p>
+          <p className="hint">
+            Vercel: Project Settings → Environment Variables → Add VITE_TMDB_API_KEY with your TMDB API key
+          </p>
+          <p className="hint">Local: Create .env with VITE_TMDB_API_KEY=your_key</p>
         </div>
       </div>
     );
